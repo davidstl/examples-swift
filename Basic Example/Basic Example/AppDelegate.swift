@@ -49,12 +49,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         AppDelegate._bc.getBCClient().enableLogging(true)
         
-        AppDelegate._bc.initialize("https://sharedprod.braincloudservers.com/dispatcherv2",
-                                   secretKey: "921d9acc-e286-4b37-91b6-a394f4e6ff4f",    // Replace the Secret and
-            gameId: "12049",                                      // AppId with the one on the dashboard
-            gameVersion: "1.0.0",
-            companyName: "brainCloud",
-            gameName: "Basic - Swift")
+        
+        var dictionary: [String: String] = [:]
+        
+        dictionary["12720"] = "f99081d2-0644-434e-9eb5-8d721a188488"
+        dictionary["12049"] = "921d9acc-e286-4b37-91b6-a394f4e6ff4f"
+        
+        
+        
+        AppDelegate._bc.initialize(withApps: "https://sharedprod.braincloudservers.com/dispatcherv2", defaultAppId: "12720", secretMap: dictionary, appVersion: "1.0.0", companyName: "brainCloud", appName: "Basic - Swift")
+        
         
         
         let center = UNUserNotificationCenter.current()

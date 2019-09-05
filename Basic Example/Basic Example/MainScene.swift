@@ -214,6 +214,51 @@ class MainScene: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource 
     }
     
     @IBAction func onSendPushNotificationsClicked(_ sender: Any) {
+
+        /** cloud code example
+ var response = {};
+ 
+ var toProfileId = bridge.profileId;
+ 
+ var fcmContent = {
+ "notification": {
+ "body": "content of message",
+ "title": "message title"
+ },
+ "data": {
+ "customfield1": "customValue1",
+ "customfield2": "customValue2"
+ },
+ "priority": "normal"
+ };
+ var iosContent = {
+ "aps": {
+ "alert": {
+ "body": "content of message",
+ "title": "message title"
+ },
+ "badge": 0,
+ "sound": "gggg"
+ }
+ };
+ var facebookContent = {
+ "template": "content of message"
+ };
+ 
+ var pushNotificationProxy = bridge.getPushNotificationServiceProxy();
+ 
+ var postResult = pushNotificationProxy.sendRawPushNotification(
+ toProfileId,
+ fcmContent,
+ iosContent,
+ facebookContent
+ );
+ 
+ response;
+ */
+        AppDelegate._bc.scriptService.run("Test", jsonScriptData: "", completionBlock: nil, errorCompletionBlock: nil, cbObject: nil);
+        
+        // Or regular push example
         AppDelegate._bc.pushNotificationService.sendSimplePushNotification(
             AppDelegate._bc.storedProfileId,
             message: "Message_" + String(describing: arc4random_uniform(2000)),

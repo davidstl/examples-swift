@@ -69,14 +69,22 @@ class LoginScene: UIViewController {
         
         AppDelegate._bc.authenticateEmailPassword(lEmail.text,
                                               password: lPassword.text,
-                                              forceCreate: false,
+                                              forceCreate: true,
                                               completionBlock: onAuthenticate,
                                               errorCompletionBlock: onAuthenticateFailed,
                                               cbObject: nil)
     }
     
     func onAuthenticate(serviceName:String?, serviceOperation:String?, jsonData:String?, cbObject: NSObject?) {
-        print("\(serviceOperation!) Success \(jsonData!)")
+        
+        AppDelegate._bc.identityService.switch(toChildProfile: nil, childAppId: "12049", forceCreate: true, completionBlock: onProfileSwitch, errorCompletionBlock:nil, cbObject: nil);
+        
+       
+        
+    }
+    
+    func onProfileSwitch(serviceName:String?, serviceOperation:String?, jsonData:String?, cbObject: NSObject?) {
+        
         
         let data = jsonData?.data(using: String.Encoding.utf8, allowLossyConversion: false)!
         
@@ -84,14 +92,11 @@ class LoginScene: UIViewController {
             let json = try JSONSerialization.jsonObject(with: data!, options: []) as! [String: AnyObject]
             
             let data = json["data"] as AnyObject;
-            let isNewUser = data["newUser"] as! String;
+            let id = data["id"] as! String;
+
+            // Let's ensure we grab the child profile id
+            AppDelegate._bc.storedProfileId = id;
             
-            if(isNewUser.elementsEqual("true")) {
-                AppDelegate._bc.playerStateService.updateName(self.lEmail?.text,
-                                                              completionBlock: nil,
-                                                              errorCompletionBlock: nil,
-                                                              cbObject: nil)
-            }
         } catch let error as NSError {
             print("Failed to load: \(error.localizedDescription)")
         }
@@ -101,7 +106,9 @@ class LoginScene: UIViewController {
         
         self.performSegue(withIdentifier: "onLogin", sender: nil)
         
+        
     }
+    
     
     func onAuthenticateFailed(serviceName:String?, serviceOperation:String?, statusCode:Int?, reasonCode:Int?, jsonError:String?, cbObject: NSObject?) {
         print("\(serviceOperation!) Failure \(jsonError!)")
